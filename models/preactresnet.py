@@ -65,24 +65,9 @@ class PreactResNet18(LightningModule):
 
     def __init__(
         self,
-        learning_rate=0.1,
-        criterion=nn.CrossEntropyLoss(),
-        metric=torchmetrics.Accuracy(),
         num_classes=10,
-        max_epoch=500,
-        milestones=[100, 200, 300, 400],
     ):
         super().__init__()
-
-        self.learning_rate = learning_rate
-        self.max_epoch = max_epoch
-        self.milestones = milestones
-
-        self.criterion = criterion
-        self.metric = metric
-
-        # Hardcode some dataset specific attributes
-        self.num_classes = num_classes
 
         # Define PyTorch model
         self.model = nn.Sequential(
@@ -99,42 +84,13 @@ class PreactResNet18(LightningModule):
             nn.LeakyReLU(inplace=True),
             nn.AdaptiveAvgPool2d(2),
             nn.Flatten(),
-            nn.Linear(in_features=2048, out_features=self.num_classes),
+            nn.Linear(in_features=2048, out_features=num_classes),
         )
 
     def forward(self, x):
         x = self.model(x)
         return F.log_softmax(x, dim=1)
 
-    def training_step(self, batch, batch_idx):
-        x, y = batch
-        logits = self(x)
-        loss = self.criterion(logits, y)
-        return loss
 
-    def validation_step(self, batch, batch_idx):
-        x, y = batch
-        logits = self(x)
-        loss = self.criterion(logits, y)
-        preds = torch.argmax(logits, dim=1)
-        acc = self.metric(preds, y)
-
-        # Calling self.log will surface up scalars for you in TensorBoard
-        self.log("val_loss", loss, prog_bar=True, on_epoch=True)
-        self.log("val_acc", acc, prog_bar=True, on_epoch=True)
-
-        return loss
-
-    def test_step(self, batch, batch_idx):
-        # Here we just reuse the validation_step for testing
-        return self.validation_step(batch, batch_idx)
-
-    def configure_optimizers(self):
-        optimizer = torch.optim.SGD(
-            self.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=5e-4
-        )
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=self.milestones, gamma=0.1
-        )
-
-        return {"optimizer": optimizer, "scheduler": scheduler, "monitor": "val_loss"}
+def preact_resnet18():
+    return PreactResNet18

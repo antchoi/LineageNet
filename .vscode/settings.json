@@ -1,0 +1,16 @@
+{
+    "editor.formatOnSave": true,
+    "python.analysis.typeCheckingMode": "off",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--generated-members=numpy.* ,torch.*"
+    ],
+    "python.formatting.provider": "black",
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/data/*/**": true
+    }
+}
