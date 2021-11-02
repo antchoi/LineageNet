@@ -60,7 +60,7 @@ class CIFAR10DataModule(BaseDataModule):
         )
 
     @staticmethod
-    def num_classes(self) -> int:
+    def num_classes() -> int:
         """
         Return: 10
         """
