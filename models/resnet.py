@@ -10,8 +10,6 @@ Reference:
 import torch.nn as nn
 import torch.nn.functional as F
 
-from utils import GenericTrainer
-
 
 class BasicBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):

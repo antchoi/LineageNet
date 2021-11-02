@@ -8,11 +8,10 @@ import argparse
 from datetime import datetime
 
 import abc
+from tqdm import tqdm
 
 from multiprocessing.managers import SyncManager
-from torch._C import dtype
 
-from tqdm import tqdm
 
 import torch
 from torch import nn
@@ -35,12 +34,6 @@ from datamodules import BaseDataModule
 
 from utils import GenericTrainer
 from utils.trainer import Stage
-
-
-# from PIL import PngImagePlugin
-
-# PngImagePlugin.MAX_TEXT_CHUNK = 1000 * (1024 ** 2)
-
 
 MODEL_NAMES = sorted(
     name
@@ -205,15 +198,6 @@ def select_datamodule_class(dataset_type: str) -> nn.Module:
     return DataModules.__dict__[dataset_type]()
 
 
-def write_model_summary(
-    model: nn.Module,
-    datamodule: BaseDataModule,
-    logger: SummaryWriter,
-):
-    images, _ = iter(datamodule.train_dataloader()).next()
-    logger.add_graph(model, images)
-
-
 def print_model_summary(
     model: nn.Module, batch_size: int, image_size: int, device: str = "cpu"
 ):
@@ -351,9 +335,6 @@ def train_model(
 
     trainer.configure()
     trainer.ready()
-
-    # if main_worker:
-    #     write_model_summary(trainer.model, datamodule=datamodule, logger=logger)
 
     best_acc_top1 = 0.0
     best_acc_top5 = 0.0

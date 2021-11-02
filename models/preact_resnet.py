@@ -8,8 +8,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from torch.cuda.amp import autocast
-
 
 class PreActBlock(nn.Module):
     """Pre-activation version of the BasicBlock."""
@@ -138,10 +136,14 @@ def PreActResNet152(num_classes=10):
     return PreActResNet(PreActBottleneck, [3, 8, 36, 3], num_classes)
 
 
-def test():
-    net = PreActResNet18()
-    y = net((torch.randn(1, 3, 32, 32)))
-    print(y.size())
+def preact_resnet18():
+    return PreActResNet18
+
+
+# def test():
+#     net = PreActResNet18()
+#     y = net((torch.randn(1, 3, 32, 32)))
+#     print(y.size())
 
 
 # test()
