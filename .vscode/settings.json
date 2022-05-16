@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
+    "files.eol": "\n",
     "python.analysis.typeCheckingMode": "off",
     "python.linting.enabled": true,
     "python.linting.lintOnSave": true,

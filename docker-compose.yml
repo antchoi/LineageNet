@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  unittest:
+    container_name: "aiid_testbed"
+    command: ["-s",  "${UNITTEST_TARGET:-}"]
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+      network: host
+      args:
+        - USER_ID=${USER_ID}
+        - USER_NAME=${USER_NAME}
+        - GROUP_ID=${GROUP_ID}
+        - GROUP_NAME=${GROUP_NAME}
+    user: ${USER_ID}:${GROUP_ID}
+    volumes:
+      - type: bind
+        source: ${ORANGE_NFS_MOUNT_PATH}
+        target: /orange
+
+      - type: bind
+        source: ${OLIVE_NFS_MOUNT_PATH}
+        target: /olive
+
+      - type: bind
+        source: ${HOME}
+        target: /host
+        read_only: true
+
+      - type: bind
+        source: /usr/lib/x86_64-linux-gnu/libnvcuvid.so
+        target: /usr/lib/x86_64-linux-gnu/libnvcuvid.so
+        read_only: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]

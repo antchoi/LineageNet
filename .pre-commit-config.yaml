@@ -1,0 +1,32 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+    -   id: trailing-whitespace
+        exclude: ^server/plugin/
+    -   id: end-of-file-fixer
+        exclude: ^server/plugin/
+    -   id: check-yaml
+        exclude: ^server/plugin/
+    -   id: check-added-large-files
+        exclude: ^(resource/)
+
+-   repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.1.0
+    hooks:
+    -   id: reorder-python-imports
+
+# -   repo: https://github.com/psf/black
+#     rev: 21.12b0
+#     hooks:
+#     -   id: black
+#         exclude: ^server/plugin/
+# -   repo: local
+#     hooks:
+#     -   id: unit test
+#         name: unit test
+#         entry: python -m pytest
+#         language: system
+#         types: [python]
